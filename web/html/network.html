@@ -1,0 +1,42 @@
+<html>
+	<head>
+		{% include 'html/header.html' %}
+		<script>
+			$(function(){
+				$('#scan').click(function(){
+					$.ajax({
+							url: "{% url 'network_scan_result' %}",           
+							type: "GET",
+							cache:false,
+							dataType: 'json',
+							success: function (data) {
+								var complete_option = ""
+								var options_header = "<select class='form-select' aria-label='Default select example'>"
+								var options_footer = "</select>"
+								complete_option += options_header;
+								for (let i=0; i<data["Network"].length; i++) {
+									complete_option += "<option value="+ i.toString() +">" + data["Network"][i]["ssid"] + "</option>";
+								}
+								// complete_option += "<option value='1'>"+ data["Network"][0]["ssid"] +"</option>";
+								complete_option += options_footer;
+								$("#opt").html(complete_option);
+							},
+							error: function (xhr, ajaxOptions, thrownError) {
+							alert(xhr.status);
+							alert(thrownError);
+						}
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		{% include 'html/nav.html' %}
+		<div class="container-sm">
+			<select class="form-select" multiple aria-label="multiple select example" id="opt">
+				<option selected>Select network for connect</option>
+			</select>
+			<input type="button" id="scan" value="Scan Access Point"></input>
+		</div>
+	</body>
+</html>
