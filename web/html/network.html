@@ -11,13 +11,46 @@
 							dataType: 'json',
 							success: function (data) {
 								var complete_option = ""
-								var options_header = "<select class='form-select' aria-label='Default select example'>"
+								/*
+								var options_header = "<select class='form-select form-select-sm' aria-label='Default select example'>"
 								var options_footer = "</select>"
 								complete_option += options_header;
 								for (let i=0; i<data["Network"].length; i++) {
-									complete_option += "<option value="+ i.toString() +">" + data["Network"][i]["ssid"] + "</option>";
+									complete_option += "<option value="+ i.toString() +">";
+									complete_option += data["Network"][i]["ssid"];
+									complete_option += " ";
+									complete_option += data["Network"][i]["flags"];
+									complete_option += "</option>"
 								}
 								// complete_option += "<option value='1'>"+ data["Network"][0]["ssid"] +"</option>";
+
+								complete_option += options_footer;*/
+								var table_header = "<tr>";
+								var options_footer = "</tr>"
+								var ssid_number = 0;
+								for (let i=0; i<data["Network"].length; i++) {
+									/* Remove too long or too short name of ssid */
+									if(data["Network"][i]["ssid"].length > 10 || data["Network"][i]["ssid"].length < 1) {
+										continue;
+									}
+									complete_option += table_header;
+									complete_option += "<th scope='row'>"+ ssid_number +"</th>"
+									complete_option += "<td>";
+									complete_option += data["Network"][i]["ssid"];
+									complete_option += "</td>";
+									complete_option += "<td>";
+									complete_option += data["Network"][i]["flags"];
+									complete_option += "</td>";
+									complete_option += "<td>";
+									complete_option += data["Network"][i]["signal_level"];
+									complete_option += "</td>";
+									complete_option += "</td>";
+									complete_option += "<td>";
+									complete_option += "<button type='button' class='btn btn-primary' value=" + data["Network"][i]["ssid"] + ">Connect</button>"
+									complete_option += "</td>";
+									complete_option += options_footer;
+									ssid_number += 1;
+								}
 								complete_option += options_footer;
 								$("#opt").html(complete_option);
 							},
@@ -33,9 +66,22 @@
 	<body>
 		{% include 'html/nav.html' %}
 		<div class="container-sm">
-			<select class="form-select" multiple aria-label="multiple select example" id="opt">
+			<!--select class="form-select" multiple aria-label="multiple select example" id="opts">
 				<option selected>Select network for connect</option>
-			</select>
+			</select-->
+			<table class="table">
+				<thead>
+				  <tr>
+					<th scope="col">#</th>
+					<th scope="col">SSID</th>
+					<th scope="col">Security</th>
+					<th scope="col">Signal level</th>
+					<th scope="col"></th>
+				  </tr>
+				</thead>
+				<tbody id ="opt">
+				</tbody>
+			  </table>
 			<input type="button" id="scan" value="Scan Access Point"></input>
 		</div>
 	</body>

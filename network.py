@@ -31,7 +31,7 @@ class wireless:
             network_dic_item["id"] = network_info[0]
             network_dic_item["ssid"] = network_info[1]
             network_dic_item["bssid"] = network_info[2]
-            network_dic_item["Security"] = network_info[3]
+            network_dic_item["security"] = network_info[3]
             network_dic.append(network_dic_item)
 
         return network_dic
