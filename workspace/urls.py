@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', homepage),
     path('detect', detect),
+    path('temperature', read_temperature, name = 'temperature'),
     path('network', network),
     path('network_scan_result', network_scan_result, name = 'network_scan_result'),
     path('live/', livefe, name = 'livefe'),

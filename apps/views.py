@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from django.views.decorators import gzip
 from django.http import StreamingHttpResponse, HttpResponse
+import temperature
 import json
 import camera
 import network
 
 # camera object
 cam = camera.mycamera('/dev/video0')
+
+# temperature object
+temp = temperature.temperature()
 
 # network manager object
 network_manager = network.wireless()
@@ -24,6 +28,11 @@ def livefe(request):
 
 def detect(request):
     return render(request,'html/detect.html')
+
+def read_temperature(request):
+    response_data = {}
+    response_data["temperature"] = temp.read_temp()
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def network(request):
     return render(request,'html/network.html')

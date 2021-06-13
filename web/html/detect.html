@@ -1,9 +1,40 @@
 <html>
 	<head>
 		{% include 'html/header.html' %}
+		<script>
+			$(function(){
+				setInterval(function(){
+					$.ajax({
+							url: "{% url 'temperature' %}",           
+							type: "GET",
+							cache:false,
+							dataType: 'json',
+							success: function (data) {
+								// console.log(data["temperature"]);
+								var temperature = "";
+								var header = '<h2 class="text-success">'
+								var footer = '</h2>'
+								temperature += header;
+								temperature += "Current: "
+								temperature += data["temperature"]["TA"];
+								temperature += ", ";
+								temperature += "Body: "
+								temperature += data["temperature"]["TOBJ1"];
+								temperature += footer;
+								$("#temperature").html(temperature);
+							},
+							error: function (xhr, ajaxOptions, thrownError) {
+						}
+					});
+				}, 500);
+			});
+		</script>
 	</head>
 	<body>
 		{% include 'html/nav.html' %}
-		<img src="{% url 'livefe' %}" />
+		<div class="container">
+			<div id = "temperature"></div>
+			<img src="{% url 'livefe' %}" />
+		</div>
 	</body>
 </html>

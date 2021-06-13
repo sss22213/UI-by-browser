@@ -43,6 +43,7 @@ class mycamera:
         return jpeg.tobytes()
 
     def face_detect(self, frame):
+
         # For speed up, Convert RGB image to gray image
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -56,6 +57,7 @@ class mycamera:
             if w*h >= max_rectangle:
                 max_pos = [x, y, w, h]
                 max_rectangle = w*h
+
         if max_pos is not None:
             x, y, w, h = max_pos[0], max_pos[1], max_pos[2], max_pos[3]
             cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 4)
