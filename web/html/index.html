@@ -1,10 +1,102 @@
 <html>
 	<head>
 		{% include 'html/header.html' %}
+		<script>
+			$(function(){
+
+				// Get System time
+				setInterval(function(){
+					$.ajax({
+							url: "{% url 'system_time' %}",           
+							type: "GET",
+							cache:false,
+							dataType: 'json',
+							success: function (data) {
+								$("#system_time").html(data["System_time"]);
+							},
+							error: function (xhr, ajaxOptions, thrownError) {
+						}
+					});
+				}, 500);
+
+				// Get system information
+				$(function(){
+					$.ajax({
+							url: "{% url 'system_info' %}",           
+							type: "GET",
+							cache:false,
+							dataType: 'json',
+							success: function (data) {
+								header = "<label class='col-sm-2 col-form-label'>"
+								footer = "</label>"
+								$("#Model").html(header + "Model: " + data["Model"] + footer);
+								$("#SN").html(header + "SN: " + data["SN"] + footer);
+								$("#Manufacturer").html(header + "Manufacturer: " + data["Manufacturer"] + footer);
+							},
+							error: function (xhr, ajaxOptions, thrownError) {
+						}
+					});
+				});
+
+				// Get Support feature
+				$(function(){
+					$.ajax({
+							url: "{% url 'support_feature' %}",           
+							type: "GET",
+							cache:false,
+							dataType: 'json',
+							success: function (data) {
+								header = "<label class='col-sm-2 col-form-label'>"
+								footer = "</label>"
+							},
+							error: function (xhr, ajaxOptions, thrownError) {
+						}
+					});
+				});
+			});
+		</script>
 	</head>
 	<body>
 		{% include 'html/nav.html' %}
-        <div class="container-lg">
+        <div class="container-sm">
+			<div class="col">
+				<div class="p-3 border bg-light">System Information</div>
+			</div>
+			<div class="col">
+				<div id = "Model"></div>
+			</div>
+			<div class="col">
+				<div id = "Manufacturer"></div>
+			</div>
+			<div class="col">
+				<div id = "SN"></div>
+			</div>
+			<div class="col">
+				<div class="p-3 border bg-light">System Time</div>
+			</div>
+			<div class="col">
+				<div id = "system_time"></div>
+			</div>
+			<div class="col">
+				<div class="p-3 border bg-light">Support</div>
+			</div>
+				<div class = "row">
+					<div id = support_service></div>
+				</div>
+				<div class = "row">
+					<label class="col-sm-2 col-form-label">Detect</label>
+				</div>
+			<div class="col">
+				<div class="p-3 border bg-light">System Information</div>
+			</div>
+			<div class="col">
+				<div class = "row">
+					<label class="col-sm-2 col-form-label">System Virsion</label>
+				</div>
+				<div class = "row">
+					<label class="col-sm-2 col-form-label">Firmware Version:</label>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>

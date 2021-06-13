@@ -23,6 +23,9 @@ urlpatterns = [
     path('detect', detect),
     path('temperature', read_temperature, name = 'temperature'),
     path('network', network),
+    path('system_time', system_time, name = 'system_time'),
+    path('system_info', system_info, name = 'system_info'),
+    path('support_feature', support_feature, name = 'support_feature'),
     path('network_scan_result', network_scan_result, name = 'network_scan_result'),
     path('live/', livefe, name = 'livefe'),
 ]
