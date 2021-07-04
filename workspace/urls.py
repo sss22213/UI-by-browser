@@ -22,6 +22,7 @@ urlpatterns = [
     path('', homepage),
     path('detect', detect),
     path('temperature', read_temperature, name = 'temperature'),
+    path('mqtt_switch', mqtt_switch),
     path('network', network),
     path('system_time', system_time, name = 'system_time'),
     path('system_info', system_info, name = 'system_info'),

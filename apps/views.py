@@ -3,21 +3,62 @@ from django.views.decorators import gzip
 from django.http import StreamingHttpResponse, HttpResponse
 from datetime import datetime
 from pi_hardware_info import ModelType, get_info
-import temperature
+import sensor.temperature
 import json
 import camera
 import network
+import mqtt
+import sensor_register
+from .models import system_config, sensor_config
 
-# camera object
+'''
+Initialize function
+'''
+# Camera object
 cam = camera.mycamera('/dev/video0')
 
-# temperature object
-temp = temperature.temperature()
-
-# network manager object
+# Network manager object
 network_manager = network.wireless()
 
-# Create your views here.
+# Temperature object
+temp = sensor.temperature.temperature()
+
+# Sensor register
+sensor_table = sensor_register.sensor_register()
+sensor_table.register_by_table(temp.register_table())
+sensor_table.initial_all_sensor()
+
+# Initialize mqtt
+mc = mqtt.mqtt_center()
+# Dependence by register table
+mc.add_register_table(sensor_table.sensor_table)
+mc.run()
+
+'''
+Django callback function
+'''
+# Switch status of mqtt
+def mqtt_switch(request):
+    # mqtt_config_from_client = json.load(request.body)
+    
+    # Read mqtt status from database
+    current_mqtt_status = system_config.objects.get(name="mqtt")
+    
+    if current_mqtt_status.value == 'true':
+        # Switch status of mqtt 
+        current_mqtt_status.value = 'false'
+        # turn off mqtt
+    else:
+        # Switch status of mqtt 
+        current_mqtt_status.value = 'true'
+        # turn on mqtt
+
+
+    # Write database
+    current_mqtt_status.save()
+
+    return render(request,'html/network.html')
+
 def homepage(request):
     return render(request,'html/index.html')
 
@@ -33,7 +74,7 @@ def detect(request):
 
 def read_temperature(request):
     response_data = {}
-    response_data["temperature"] = temp.read_temp()
+    response_data["temperature"] = sensor_table.sensor_table['Temperature']["get_value"]()
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def network(request):
